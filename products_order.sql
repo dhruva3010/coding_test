@@ -1,46 +1,44 @@
 create schema products_order;
+use products_order;
+CREATE TABLE Customers (
+  customer_id INTEGER NOT NULL AUTO_INCREMENT,
+  first_name VARCHAR(255) NOT NULL,
+  last_name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(255) NOT NULL,
+  address VARCHAR(255) NOT NULL,
+  city VARCHAR(255) NOT NULL,
+  state VARCHAR(255) NOT NULL,
+  zipcode VARCHAR(255) NOT NULL,
+  PRIMARY KEY (customer_id)
+);
 
-create table products_order.product (
-    product_id CHAR(10) PRIMARY KEY,
-    product_name VARCHAR(100) NOT NULL,
-    product_description VARCHAR(500),
-    quantity numeric(10),
-    price numeric(10,4),
-    manufacture_date DATE,
-    product_added_on TIMESTAMP
-)
+CREATE TABLE Orders (
+  order_id INTEGER NOT NULL AUTO_INCREMENT,
+  customer_id INTEGER NOT NULL,
+  order_date DATETIME NOT NULL,
+  total_amount DECIMAL(10,2) NOT NULL,
+  status VARCHAR(255) NOT NULL,
+  PRIMARY KEY (order_id),
+  FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
+);
 
-create table products_order.customers (
-    customer_id CHAR(50) PRIMARY KEY,
-    username VARCHAR(250) NOT NULL UNIQUE,
-    name VARCHAR(500),
-    join_date TIMESTAMP,
-    email VARCHAR(100),
-    phone CHAR(15)
-)
+CREATE TABLE OrderItems (
+  order_item_id INTEGER NOT NULL AUTO_INCREMENT,
+  order_id INTEGER NOT NULL,
+  product_id INTEGER NOT NULL,
+  quantity INTEGER NOT NULL,
+  price DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (order_item_id),
+  FOREIGN KEY (order_id) REFERENCES Orders(order_id),
+  FOREIGN KEY (product_id) REFERENCES Products(product_id)
+);
 
-create table products_order.orders (
-    product_id CHAR(10) FOREIGN KEY ON products_order.product.product_id,
-    order_id CHAR(50) PRIMARY KEY,
-    order_date TIMESTAMP,
-    quantity_ordered numeric(10),
-    customer_id CHAR(50) FOREIGN KEY ON products_order.customers.customer_id,
-    total_price numeric(10,4),
-    payment_mode VARCHAR(100),
-    salesman_id CHAR(50) FOREIGN KEY ON products_order.salesman.salesman_id,
-    locations_id CHAR(50) FOREIGN KEY ON products_order.locations.locations_id
-)
-
-create table products_order.locations (
-    locations_id CHAR(50) PRIMARY KEY,
-    location VARCHAR(100)
-)
-
-create table products_order.salesman (
-    salesman_id CHAR(50) PRIMARY KEY,
-    name VARCHAR(500),
-    address VARCHAR(1000),
-    GSTIN CHAR(20),
-    contact CHAR(15),
-    join_date DATE
-)
+CREATE TABLE Products (
+  product_id INTEGER NOT NULL AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  description TEXT NOT NULL,
+  price DECIMAL(10,2) NOT NULL,
+  category VARCHAR(255) NOT NULL,
+  PRIMARY KEY (product_id)
+);

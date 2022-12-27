@@ -1,11 +1,17 @@
-def sum_closest(numbers):
-    n = len(numbers)
-    for i in range(n):
-        for j in range(1, n-1):
-            if(i!=j):
-                if(numbers[i] + numbers[j] == 0 or numbers[i] + numbers[j] == 1):
-                    print('The 2 numbers closest to 0 are:', numbers[i], ' and ', numbers[j],' distance=', numbers[i] + numbers[j] )
-                    return
+def closestToZero(arr):
+    arr.sort()  # sort the array in ascending order
+    left = 0  # initialize left pointer
+    right = len(arr) - 1  # initialize right pointer
+    minSum = float('inf')  # initialize minSum to maximum possible value
+    while left <= right:  # while left pointer is less than or equal to right pointer
+        sum = arr[left] + arr[right]  # calculate sum of elements at left and right pointers
+        if abs(sum) < abs(minSum):  # if absolute value of sum is less than absolute value of minSum
+            minSum = sum  # update minSum
+        if sum < 0:  # if sum is less than zero
+            left += 1  # increment left pointer
+        else:  # if sum is greater than or equal to zero
+            right -= 1  # decrement right pointer
+    return (arr[left], arr[right])  # return elements at left and right pointers
 
-print('Array:', [-23, 12, -35, 45, 20, 36])
-sum_closest([-23, 12, -35, 45, 20, 36])
+arr = [-1, 2, 3, -4, 5]
+print(closestToZero)

@@ -1,10 +1,5 @@
-select FIRST_NAME, LAST_NAME, salary from (
-    select FIRST_NAME, LAST_NAME, salary, AVG(salary) average_salary from (
-    (select FIRST_NAME, LAST_NAME, salary from employees) e 
-    left join
-    (select DEPARTMENT_ID, DEPARTMENT_NAME from departments
-    where DEPARTMENT_NAME = 'IT') d
-    on e.DEPARTMENT_ID = d.DEPARTMENT_ID
-    )
-) res
-where res.salary > res.average_salary
+SELECT e.first_name, e.last_name, e.salary
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+WHERE e.salary > (SELECT AVG(salary) FROM employees)
+AND d.department_name IN ('IT')
